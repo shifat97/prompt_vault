@@ -1,0 +1,47 @@
+import { expect, Page } from '@playwright/test';
+import { wait_for_loadState } from '../../../base_interactions/utils';
+
+export const NEW_CAT_BTN = '//button[contains(text(), "New Category")]';
+export const CAT_SEARCH_FIELD = '//input[@type="search"]';
+export const CAT_NAME_FILED = '//input[@id="name"]';
+export const SAVE_UPDATE_BUTTON = '//button[@type="submit"]';
+export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
+
+export async function delete_prompt(page: Page, test: any, ai: any, delete_string: string) {
+  await page.locator(`//div[@class="text-right"]//button[@title="Delete ${delete_string}"]`).click();
+}
+
+export async function edit_prompt(page: Page, test: any, ai: any, edit_string: string) {
+  await page.locator(`//div[@class="text-right"]//button[@title="Edit ${edit_string}"]`).click();
+}
+
+export async function navigate_category(page: Page, test: any, ai: any) {
+  await page.goto(`${process.env.BASE_URL}/categories`);
+  await expect(page).toHaveURL(/categories/);
+  await wait_for_loadState(page, test, ai, 'networkidle', 5000);
+}
+
+export async function choose_cat_color(page: Page, test: any, ai: any): Promise<string> {
+  const color_list = ['Violet', 'Indigo', 'Blue', 'Sky', 'Teal', 'Emerald', 'Lime', 'Amber', 'Orange', 'Rose', 'Pink', 'Fuchsia', 'Slate', 'Stone'];
+  const choose_random_color = color_list[Math.floor(Math.random() * color_list.length)];
+  return `//button[@title="${choose_random_color}"]`;
+}
+
+export async function create_cat(page: Page, test: any, ai: any, cat_name: string) {
+  await page.locator(NEW_CAT_BTN).click();
+  await page.locator(CAT_NAME_FILED).fill(cat_name);
+  await page.locator(await choose_cat_color(page, test, ai)).click();
+  await wait_for_loadState(page, test, ai, 'load', 1000);
+  await page.locator(SAVE_UPDATE_BUTTON).click();
+}
+
+export async function update_cat(page: Page, test: any, ai: any, update_string: string) {
+  await page.locator(CAT_NAME_FILED).fill(update_string);
+  await page.locator(SAVE_UPDATE_BUTTON).click();
+}
+
+export async function search_cat(page: Page, test: any, ai: any, search_text: string) {
+  await page.locator(CAT_SEARCH_FIELD).fill(search_text);
+  await wait_for_loadState(page, test, ai, 'load', 2000);
+  await expect(page.locator(`//p[contains(text(), "${search_text}")]`)).toBeVisible();
+}
