@@ -15,7 +15,7 @@ export const PASSWORD_ERROR = '//p[@id="password-error"]';
 export const CONFIRM_PASSWORD_ERROR = '//p[@id="confirmPassword-error"]';
 export const SIGN_IN_LINK = '//a[@href="/login"]';
 
-export async function nevigate_signup(page: Page, test: any, ai: any) {
+export async function navigate_signup(page: Page, test: any, ai: any) {
   await page.goto(`${process.env.BASE_URL}/register`);
   await wait_for_loadState(page, test, ai, 'networkidle', 5000);
 }

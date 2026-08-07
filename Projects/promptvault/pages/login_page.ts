@@ -9,7 +9,7 @@ export const FORGOT_PASSWORD_LINK = '//a[@href="/forgot-password"]';
 export const EMAIL_ERROR = '//p[@id="email-error"]';
 export const PASSWORD_ERROR = '//p[@id="password-error"]';
 
-export async function nevigate_login(page: Page, test: any, ai: any) {
+export async function navigate_login(page: Page, test: any, ai: any) {
   await page.goto(`${process.env.BASE_URL}/login`);
   await wait_for_loadState(page, test, ai, 'networkidle', 5000);
 }
