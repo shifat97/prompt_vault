@@ -22,15 +22,15 @@ export async function login(page: Page, test: any, ai: any, email: string, passw
   await page.locator(LOGIN_BTN).click();
 }
 
-export async function is_email_error_visible(page: Page, test: any, ai: any) {
+export async function is_email_error_visible(page: Page, test: any, ai: any): Promise<boolean> {
   return await page.locator(EMAIL_ERROR).isVisible();
 }
 
-export async function is_password_error_visible(page: Page, test: any, ai: any) {
+export async function is_password_error_visible(page: Page, test: any, ai: any): Promise<boolean> {
   return await page.locator(PASSWORD_ERROR).isVisible();
 }
 
-export async function is_google_login_button_visible(page: Page, test: any, ai: any) {
+export async function is_google_login_button_visible(page: Page, test: any, ai: any): Promise<boolean> {
   return await page.locator(GOOGLE_LOGIN_BUTTON).isVisible();
 }
 
