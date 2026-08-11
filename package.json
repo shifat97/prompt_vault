@@ -9,6 +9,7 @@
     "test:chess2": "cross-env PROJECT_NAME=chess2 npx playwright test",
     "test:keystone": "cross-env PROJECT_NAME=keystone npx playwright test",
     "test:docomate": "cross-env PROJECT_NAME=docomate npx playwright test",
+    "test:pv": "cross-env PROJECT_NAME=promptvault npx playwright test",
     "test:iam": "cross-env PROJECT_NAME=IAM npx playwright test",
     "test:ci": "npx playwright test"
   },

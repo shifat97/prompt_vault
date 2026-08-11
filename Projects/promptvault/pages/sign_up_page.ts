@@ -14,19 +14,29 @@ export const EMAIL_ERROR = '//p[@id="email-error"]';
 export const PASSWORD_ERROR = '//p[@id="password-error"]';
 export const CONFIRM_PASSWORD_ERROR = '//p[@id="confirmPassword-error"]';
 export const SIGN_IN_LINK = '//a[@href="/login"]';
+export const VERIFICATION_SUCCESS_MESSAGE = '//div[contains(text(), "Verification email sent to")]';
 
 export async function navigate_signup(page: Page, test: any, ai: any) {
   await page.goto(`${process.env.BASE_URL}/register`);
   await wait_for_loadState(page, test, ai, 'networkidle', 5000);
 }
 
-export async function register(page: Page, test: any, ai: any, fullname: string, email: string, password: string, confirm_password: string) {
+export async function register(
+  page: Page,
+  test: any,
+  ai: any,
+  fullname: string,
+  email: string,
+  password: string,
+  confirm_password: string,
+) {
   await page.locator(FULLNAME_FIELD).fill(fullname);
   await page.locator(EMAIL_FIELD).fill(email);
   await page.locator(PASSWORD_FIELD).fill(password);
   await page.locator(CONFIEM_PASSWORD_FIELD).fill(confirm_password);
-  await wait_for_loadState(page, test, ai, 'load', 1000);
+  await page.locator(TERMS_CHECKBOX).check();
   await page.locator(CREATE_ACCOUNT_BTN).click();
+  await wait_for_loadState(page, test, ai, 'domcontentloaded', 1000);
 }
 
 export async function is_email_error_visible(page: Page, test: any, ai: any): Promise<boolean> {
@@ -49,4 +59,8 @@ export async function click_terms_link(page: Page, test: any, ai: any) {
 export async function click_privacy_link(page: Page, test: any, ai: any) {
   await page.locator(PRIVACY_LINK).click();
   await expect(page).toHaveURL(`${process.env.BASE_URL}/privacy-policy`);
+}
+
+export async function is_verification_success_visible(page: Page, test: any, ai: any): Promise<boolean> {
+  return await page.locator(VERIFICATION_SUCCESS_MESSAGE).isVisible();
 }
