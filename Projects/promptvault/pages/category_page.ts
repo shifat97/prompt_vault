@@ -42,7 +42,7 @@ export async function CHOOSE_CAT_COLOR(page: Page, test: any, ai: any): Promise<
 
 export async function navigate_category(page: Page, test: any, ai: any) {
   await page.goto(`${process.env.BASE_URL}/categories`);
-  await wait_for_loadState(page, test, ai, 'load', 5000);
+  await wait_for_loadState(page, test, ai, 'load', 1000);
   await expect(page).toHaveURL(/categories/);
 }
 
@@ -52,17 +52,20 @@ export async function create_cat(page: Page, test: any, ai: any, cat_name: strin
   await page.locator(await CHOOSE_CAT_COLOR(page, test, ai)).click();
   await wait_for_loadState(page, test, ai, 'load', 1000);
   await page.locator(SAVE_UPDATE_BUTTON).click();
+  await wait_for_loadState(page, test, ai, 'load', 1000);
 }
 
 export async function update_cat(page: Page, test: any, ai: any, edit_string: string, update_string: string) {
   await CLICK_EDIT_PROMPT(page, test, ai, edit_string);
   await page.locator(CAT_NAME_FILED).fill(update_string);
   await page.locator(SAVE_UPDATE_BUTTON).click();
+  await wait_for_loadState(page, test, ai, 'load', 1000);
 }
 
 export async function delete_cat(page: Page, test: any, ai: any, delete_string: string) {
   await CLICK_DELETE_PROMPT(page, test, ai, delete_string);
   await page.locator(DELETE_BUTTON).click();
+  await wait_for_loadState(page, test, ai, 'load', 1000, 40000);
 }
 
 export async function search_cat(page: Page, test: any, ai: any, search_text: string) {
