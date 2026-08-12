@@ -2,21 +2,11 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 import { test, expect } from '@playwright/test';
-import { is_email_error_visible, navigate_login, login } from '../pages/login_page';
 import { navigate_signup, register, is_verification_success_visible } from '../pages/sign_up_page';
 import { PromptVaultMailTmClient } from '../../../utils/promptvault/mailtm_client';
 import { wait_for_loadState } from '../../../base_interactions/utils';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
-
-// Template
-// test('WHIZ : SIGNIN PAGE : Continue with Google button is visible', async ({ page }) => {
-//   const isVisible = await is_google_signin_button_visible(page, test, null);
-//   console.log(`Google Sign-In button visible: ${isVisible}`);
-
-//   expect(isVisible).toBe(true);
-//   console.log('Assertion success: Continue with Google button is visible');
-// });
 
 // go to sign up page -> sign up -> verify email -> check if the url is 'https://stage.promptvault.us/dashboard' verify this url.
 test('PV : SIGNUP PAGE : Sign up and verify email', async ({ page }) => {
