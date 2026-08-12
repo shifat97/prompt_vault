@@ -12,3 +12,9 @@ export const CATEGORY_DATA = {
   name: 'Category ' + Math.floor(Math.random() * 1000),
   update_string: 'Updated Category ' + Math.floor(Math.random() * 1000),
 };
+
+export const PROMPT_DATA = {
+  name: 'Prompt ' + Math.floor(Math.random() * 1000),
+  update_string: 'Updated Prompt ' + Math.floor(Math.random() * 1000),
+  description: 'This is a test description',
+};
