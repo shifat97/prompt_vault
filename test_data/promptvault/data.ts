@@ -19,3 +19,10 @@ export const PROMPT_DATA = {
   update_name: 'Updated Prompt ' + Math.floor(Math.random() * 1000),
   update_description: 'This is an updated test description',
 };
+
+export const TEAM_DATA = {
+  name: 'Team ' + Math.floor(Math.random() * 1000),
+  description: 'This is a test description',
+  update_name: 'Updated Team ' + Math.floor(Math.random() * 1000),
+  update_description: 'This is an updated test description',
+};
