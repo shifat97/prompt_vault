@@ -16,15 +16,9 @@ export const DELETE_CONFIRM_BUTTON =
   '//button[contains(text(), "Cancel")]/following-sibling::button[contains(text(), "Delete")]';
 export const EDIT_BUTTON = '//button[contains(text(), "Edit")]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
+export const SELECT_OPTION = '//button[@role="option"]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
-
-export async function SELECT_CAT_FROM_DROPDOWN(page: Page, test: any, ai: any, search_string: string) {
-  const cat_option = page.locator(`//button//span//span[contains(text(), "${search_string}")]`);
-  await wait_for_loadState(page, test, null, 'load', 2000);
-  await expect(cat_option).toBeVisible();
-  await cat_option.click();
-}
 
 export async function fill_updated_description(
   page: Page,
@@ -64,7 +58,7 @@ export async function create_prompt(
   await expect(cat_dropdown_search).toBeVisible();
   await cat_dropdown_search.fill(category);
 
-  await SELECT_CAT_FROM_DROPDOWN(page, test, ai, category);
+  await page.locator(SELECT_OPTION).click();
 
   await expect(save_btn).toBeVisible();
   await save_btn.click();

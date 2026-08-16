@@ -15,22 +15,25 @@ import { CATEGORY_DATA } from '../../../test_data/promptvault/data';
 
 // Login -> Create Category -> Search -> Update Category -> Search With Update String -> Delete Category -> Verify
 test('PV : CATEGORY PAGE : CRUD operations on category', async ({ page }) => {
+  const category_name = CATEGORY_DATA.name;
+  const update_category_name = CATEGORY_DATA.update_string;
+
   await navigate_category(page, test, null);
   console.log('NAVIGATING CATEGORY PAGE');
-  await create_cat(page, test, null, CATEGORY_DATA.name);
+  await create_cat(page, test, null, category_name);
   console.log('CATEGORY CREATED');
   await created_success_toast_is_visible(page, test, null);
   console.log('SUCCESS TOAST VERIFIED');
-  await search_cat(page, test, null, CATEGORY_DATA.name);
+  await search_cat(page, test, null, category_name);
   console.log('CATEGORY SEARCHED');
-  await update_cat(page, test, null, CATEGORY_DATA.name, CATEGORY_DATA.update_string);
+  await update_cat(page, test, null, category_name, update_category_name);
   await updated_success_toast_is_visible(page, test, null);
   console.log('CATEGORY UPDATED');
-  await search_cat(page, test, null, CATEGORY_DATA.update_string);
+  await search_cat(page, test, null, update_category_name);
   console.log('CATEGORY SEARCHED WITH UPDATED STRING');
-  await delete_cat(page, test, null, CATEGORY_DATA.update_string);
+  await delete_cat(page, test, null, update_category_name);
   await deleted_success_toast_is_visible(page, test, null);
   console.log('CATEGORY DELETED');
-  await is_not_cat_found_text_visible(page, test, null, CATEGORY_DATA.update_string);
+  await is_not_cat_found_text_visible(page, test, null, update_category_name);
   console.log('NOT FOUND TEXT VERIFIED');
 });
