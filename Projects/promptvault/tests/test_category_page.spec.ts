@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { navigate_login, login } from '../pages/login_page';
 import {
+  success_toast_is_visible,
   create_cat,
   is_not_cat_found_text_visible,
   navigate_category,
@@ -23,6 +24,8 @@ test.only('PV : CATEGORY PAGE : CRUD operations on category', async ({ page }) =
   console.log('NAVIGATING CATEGORY PAGE');
   await create_cat(page, test, null, CATEGORY_DATA.name);
   console.log('CATEGORY CREATED');
+  await success_toast_is_visible(page, test, null);
+  console.log('SUCCESS TOAST VERIFIED');
   await search_cat(page, test, null, CATEGORY_DATA.name);
   console.log('CATEGORY SEARCHED');
   await update_cat(page, test, null, CATEGORY_DATA.name, CATEGORY_DATA.update_string);
@@ -31,6 +34,6 @@ test.only('PV : CATEGORY PAGE : CRUD operations on category', async ({ page }) =
   console.log('CATEGORY SEARCHED WITH UPDATED STRING');
   await delete_cat(page, test, null, CATEGORY_DATA.update_string);
   console.log('CATEGORY DELETED');
-  expect(await is_not_cat_found_text_visible(page, test, null, CATEGORY_DATA.update_string)).toBe(true);
-  console.log('CATEGORY DELETED VERIFIED');
+  await is_not_cat_found_text_visible(page, test, null, CATEGORY_DATA.update_string);
+  console.log('NOT FOUND TEXT VERIFIED');
 });

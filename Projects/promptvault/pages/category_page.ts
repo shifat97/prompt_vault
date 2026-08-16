@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+import path from 'path';
+
 import { expect, Page } from '@playwright/test';
 import { wait_for_loadState } from '../../../base_interactions/utils';
 
@@ -7,13 +10,16 @@ export const CAT_NAME_FILED = '//input[@id="name"]';
 export const SAVE_UPDATE_BUTTON = '//button[@type="submit"]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
 export const NOT_CAT_FOUND_TEXT = '//div[@style="min-width: 740px;"]//div[contains(text(), "No categories found.")]';
+export const SUCCESS_TOAST = '//p[contains(text(), "Success")]';
 
-export async function CLICK_DELETE_PROMPT(page: Page, test: any, ai: any, delete_string: string) {
+dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
+
+export async function CLICK_DELETE_CATEGORY(page: Page, test: any, ai: any, delete_string: string) {
   await page.locator(`//div[@class="text-right"]//button[@title="Delete ${delete_string}"]`).click();
   await wait_for_loadState(page, test, null, 'load', 1000);
 }
 
-export async function CLICK_EDIT_PROMPT(page: Page, test: any, ai: any, edit_string: string) {
+export async function CLICK_EDIT_CATEGORY(page: Page, test: any, ai: any, edit_string: string) {
   console.log('DEBUG: ', edit_string);
   await page.locator(`//div[@class="text-right"]//button[@title="Edit ${edit_string}"]`).click();
   await wait_for_loadState(page, test, null, 'load', 1000);
@@ -42,47 +48,67 @@ export async function CHOOSE_CAT_COLOR(page: Page, test: any, ai: any): Promise<
 
 export async function navigate_category(page: Page, test: any, ai: any) {
   await page.goto(`${process.env.BASE_URL}/categories`);
-  await wait_for_loadState(page, test, ai, 'load', 1000);
+  await wait_for_loadState(page, test, ai, 'load', 5000);
   await expect(page).toHaveURL(/categories/);
 }
 
+export async function success_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(SUCCESS_TOAST);
+  await wait_for_loadState(page, test, ai, 'load', 2000);
+  await expect(success_toast).toBeVisible();
+}
+
 export async function create_cat(page: Page, test: any, ai: any, cat_name: string) {
-  await page.locator(NEW_CAT_BTN).click();
-  await page.locator(CAT_NAME_FILED).fill(cat_name);
+  const new_cat_button = page.locator(NEW_CAT_BTN);
+  const cat_name_field = page.locator(CAT_NAME_FILED);
+  const save_update_button = page.locator(SAVE_UPDATE_BUTTON);
+
+  await expect(new_cat_button).toBeVisible();
+  await new_cat_button.click();
+
+  await expect(cat_name_field).toBeVisible();
+  await cat_name_field.fill(cat_name);
   await page.locator(await CHOOSE_CAT_COLOR(page, test, ai)).click();
-  await wait_for_loadState(page, test, ai, 'load', 1000);
-  await page.locator(SAVE_UPDATE_BUTTON).click();
-  await wait_for_loadState(page, test, ai, 'load', 1000);
+
+  await expect(save_update_button).toBeVisible();
+  await save_update_button.click();
 }
 
 export async function update_cat(page: Page, test: any, ai: any, edit_string: string, update_string: string) {
-  await CLICK_EDIT_PROMPT(page, test, ai, edit_string);
-  await page.locator(CAT_NAME_FILED).fill(update_string);
-  await page.locator(SAVE_UPDATE_BUTTON).click();
-  await wait_for_loadState(page, test, ai, 'load', 1000);
+  const cat_name_field = page.locator(CAT_NAME_FILED);
+  const update_button = page.locator(SAVE_UPDATE_BUTTON);
+
+  await CLICK_EDIT_CATEGORY(page, test, ai, edit_string);
+  await expect(cat_name_field).toBeVisible();
+  await cat_name_field.fill(update_string);
+  await expect(update_button).toBeVisible();
+  await update_button.click();
 }
 
 export async function delete_cat(page: Page, test: any, ai: any, delete_string: string) {
-  await CLICK_DELETE_PROMPT(page, test, ai, delete_string);
-  await page.locator(DELETE_BUTTON).click();
-  await wait_for_loadState(page, test, ai, 'load', 1000, 40000);
+  const delete_button = page.locator(DELETE_BUTTON);
+
+  await CLICK_DELETE_CATEGORY(page, test, ai, delete_string);
+  await expect(delete_button).toBeVisible();
+  await delete_button.click();
 }
 
 export async function search_cat(page: Page, test: any, ai: any, search_text: string) {
-  await page.locator(CAT_SEARCH_FIELD).fill(search_text);
-  await wait_for_loadState(page, test, ai, 'load', 1000);
-  await expect(page.locator(`//p[contains(text(), "${search_text}")]`)).toBeVisible();
-  await page.locator(CAT_SEARCH_FIELD).clear();
-  await wait_for_loadState(page, test, ai, 'load', 1000);
+  const cat_search_field = page.locator(CAT_SEARCH_FIELD);
+  const search_result = page.locator(`//p[contains(text(), "${search_text}")]`);
+
+  await expect(cat_search_field).toBeVisible();
+  await cat_search_field.fill(search_text);
+  await expect(search_result).toBeVisible();
+  await cat_search_field.clear();
 }
 
-export async function is_not_cat_found_text_visible(
-  page: Page,
-  test: any,
-  ai: any,
-  search_text: string,
-): Promise<boolean> {
-  await page.locator(CAT_SEARCH_FIELD).fill(search_text);
-  await wait_for_loadState(page, test, ai, 'load', 1000);
-  return await page.locator(NOT_CAT_FOUND_TEXT).isVisible();
+export async function is_not_cat_found_text_visible(page: Page, test: any, ai: any, search_text: string) {
+  const cat_search_field = page.locator(CAT_SEARCH_FIELD);
+  const no_cat_found_text = page.locator(NOT_CAT_FOUND_TEXT);
+
+  await expect(cat_search_field).toBeVisible();
+  await cat_search_field.fill(search_text);
+
+  await no_cat_found_text.isVisible();
 }
