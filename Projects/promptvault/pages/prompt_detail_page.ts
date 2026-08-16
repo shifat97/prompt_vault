@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+import path from 'path';
+
 import { expect, Page } from '@playwright/test';
 import { wait_for_loadState } from '../../../base_interactions/utils';
 
@@ -14,9 +17,13 @@ export const DELETE_CONFIRM_BUTTON =
 export const EDIT_BUTTON = '//button[contains(text(), "Edit")]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
 
+dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
+
 export async function SELECT_CAT_FROM_DROPDOWN(page: Page, test: any, ai: any, search_string: string) {
-  await page.locator(`//button//span//span[contains(text(), "${search_string}")]`).click();
-  await wait_for_loadState(page, test, ai, 'load', 3000, 60000);
+  const cat_option = page.locator(`//button//span//span[contains(text(), "${search_string}")]`);
+  await wait_for_loadState(page, test, null, 'load', 2000);
+  await expect(cat_option).toBeVisible();
+  await cat_option.click();
 }
 
 export async function fill_updated_description(
@@ -26,7 +33,9 @@ export async function fill_updated_description(
   description: string,
   update_description: string,
 ) {
-  await page.locator(`//p[contains(text(), "${description}")]`).fill(update_description);
+  const desc_field = page.locator(`//p[contains(text(), "${description}")]`);
+  await expect(desc_field).toBeVisible();
+  await desc_field.fill(update_description);
 }
 
 export async function create_prompt(
@@ -37,32 +46,65 @@ export async function create_prompt(
   description: string,
   category: string,
 ) {
-  await page.locator(TITLE_INPUT_FIELD).fill(title);
-  await page.locator(DESCRIPTION_INPUT_FIELD).fill(description);
-  await page.locator(SELECT_CAT_DROPDOWN).click();
-  await page.locator(CAT_DROPDOWN_SEARCH).fill(category);
+  const title_field = page.locator(TITLE_INPUT_FIELD);
+  const desc_field = page.locator(DESCRIPTION_INPUT_FIELD);
+  const select_cat_dropdown = page.locator(SELECT_CAT_DROPDOWN);
+  const cat_dropdown_search = page.locator(CAT_DROPDOWN_SEARCH);
+  const save_btn = page.locator(SAVE_BUTTON);
+
+  await expect(title_field).toBeVisible();
+  await title_field.fill(title);
+
+  await expect(desc_field).toBeVisible();
+  await desc_field.fill(description);
+
+  await expect(select_cat_dropdown).toBeVisible();
+  await select_cat_dropdown.click();
+
+  await expect(cat_dropdown_search).toBeVisible();
+  await cat_dropdown_search.fill(category);
+
   await SELECT_CAT_FROM_DROPDOWN(page, test, ai, category);
-  await page.locator(SAVE_BUTTON).click();
-  await wait_for_loadState(page, test, ai, 'load', 3000, 60000);
+
+  await expect(save_btn).toBeVisible();
+  await save_btn.click();
+  await wait_for_loadState(page, test, null, 'load', 1000);
 }
 
 export async function update_prompt(page: Page, test: any, ai: any, title: string) {
-  await page.locator(EDIT_BUTTON).click();
-  await wait_for_loadState(page, test, ai, 'load', 3000, 60000);
-  await page.locator(TITLE_INPUT_FIELD).fill(title);
+  const edit_btn = page.locator(EDIT_BUTTON);
+  const title_field = page.locator(TITLE_INPUT_FIELD);
+
+  await expect(edit_btn).toBeVisible();
+  await edit_btn.click();
+  await wait_for_loadState(page, test, null, 'load', 1000);
+
+  await expect(title_field).toBeVisible();
+  await title_field.fill(title);
 }
 
 export async function click_update_button(page: Page, test: any, ai: any) {
-  await page.locator(UPDATE_PROMPT_BUTTON).click();
-  await wait_for_loadState(page, test, ai, 'load', 3000, 60000);
+  const update_btn = page.locator(UPDATE_PROMPT_BUTTON);
+  await expect(update_btn).toBeVisible();
+  await update_btn.click();
+  await wait_for_loadState(page, test, null, 'load', 1000);
 }
 
 export async function delete_prompt(page: Page, test: any, ai: any, title: string) {
-  await page.locator(DELETE_BUTTON).click();
-  await page.locator(DELETE_CONFIRM_BUTTON).click();
-  await wait_for_loadState(page, test, ai, 'load', 3000, 60000);
+  const delete_btn = page.locator(DELETE_BUTTON);
+  const confirm_btn = page.locator(DELETE_CONFIRM_BUTTON);
+
+  await expect(delete_btn).toBeVisible();
+  await delete_btn.click();
+
+  await expect(confirm_btn).toBeVisible();
+  await confirm_btn.click();
+  await wait_for_loadState(page, test, null, 'load', 1000);
 }
 
 export async function is_success_visible(page: Page, test: any, ai: any): Promise<boolean> {
-  return await page.locator(SUCCESS_MESSAGE).isVisible();
+  const success_msg = page.locator(SUCCESS_MESSAGE);
+  await wait_for_loadState(page, test, null, 'load', 2000);
+  await expect(success_msg).toBeVisible();
+  return await success_msg.isVisible();
 }
