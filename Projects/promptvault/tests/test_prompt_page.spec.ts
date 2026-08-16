@@ -18,6 +18,8 @@ import {
 } from '../pages/prompt_detail_page';
 import { CATEGORY_DATA, PROMPT_DATA } from '../../../test_data/promptvault/data';
 
+// Create prompt -> Search prompt -> View prompt -> Update prompt -> Delete prompt
+
 test('PV : PROMPT PAGE : CRUD operations on prompt', async ({ page }) => {
   // test.setTimeout(90000); // 90s for this test
 

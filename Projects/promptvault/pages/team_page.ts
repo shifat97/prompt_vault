@@ -83,7 +83,7 @@ export async function search_team(page: Page, test: any, ai: any, search_string:
   await search_box.fill(search_string);
 }
 
-export async function update_prompt(page: Page, test: any, ai: any, team_name: string, description: string) {
+export async function update_team(page: Page, test: any, ai: any, team_name: string, description: string) {
   const edit_button = page.locator(EDIT_TEAM_BUTTON).nth(1);
   const update_modal_title = page.locator(UPDATE_TEAM_MODAL_TITLE);
   const modal_name_field = page.locator(MODAL_NAME_FIELD);
@@ -107,7 +107,7 @@ export async function update_prompt(page: Page, test: any, ai: any, team_name: s
   await updated_success_toast_is_visible(page, test, ai);
 }
 
-export async function delete_prompt(page: Page, test: any, ai: any) {
+export async function delete_team(page: Page, test: any, ai: any) {
   const delete_button = page.locator(DELETE_TEAM_BUTTON).nth(1);
   const delete_confirm_title = page.locator(DELETE_CONFIRM_TITLE);
   const delete_confirm_button = page.locator(DELETE_CONFIRM_BUTTON);

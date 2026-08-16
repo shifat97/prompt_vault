@@ -62,7 +62,6 @@ export async function create_prompt(
 
   await expect(save_btn).toBeVisible();
   await save_btn.click();
-  await wait_for_loadState(page, test, null, 'load', 1000);
 }
 
 export async function update_prompt(page: Page, test: any, ai: any, title: string) {
@@ -71,7 +70,6 @@ export async function update_prompt(page: Page, test: any, ai: any, title: strin
 
   await expect(edit_btn).toBeVisible();
   await edit_btn.click();
-  await wait_for_loadState(page, test, null, 'load', 1000);
 
   await expect(title_field).toBeVisible();
   await title_field.fill(title);
