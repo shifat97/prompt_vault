@@ -20,8 +20,6 @@ export const CREATED_SUCCESS_TOAST = '//p[contains(text(), "Team created")]';
 export const DELETED_SUCCESS_TOAST = '//p[contains(text(), "Team deleted")]';
 export const UPDATED_SUCCESS_TOAST = '//p[contains(text(), "Team updated")]';
 
-dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
-
 export async function navigate_team(page: Page, test: any, ai: any) {
   await page.goto(`${process.env.BASE_URL}/teams`);
   await wait_for_loadState(page, test, ai, 'load', 5000);

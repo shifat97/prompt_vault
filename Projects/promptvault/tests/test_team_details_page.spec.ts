@@ -1,0 +1,154 @@
+import { test, expect } from '@playwright/test';
+import { click_new_team_button, create_team, search_team, search_is_visible, navigate_team } from '../pages/team_page';
+import {
+  navigate_team_detail_page,
+  invite_member,
+  cancel_invitation,
+  click_team_button,
+  is_member_visible,
+  invitation_sent_toast_is_visible,
+  invitation_cancel_toast_is_visible,
+  access_denied_toast_is_visible,
+} from '../pages/team_detail_page';
+import { click_profile, logout } from '../pages/header';
+import { navigate_login, login } from '../pages/login_page';
+import { click_community_link } from '../pages/sidebar';
+import {
+  click_pending_request_button,
+  click_accept_button,
+  invitation_accepted_toast_is_visible,
+} from '../pages/community_page';
+import {
+  ADMIN_LOGIN_DATA,
+  MAINTAINER_LOGIN_DATA,
+  MEMBER_LOGIN_DATA,
+  TEAM_DATA,
+} from '../../../test_data/promptvault/data';
+
+test('PV : TEAM DETAIL PAGE : Create team -> Invite admin user -> Accepet invite -> Check access', async ({
+  page,
+  browser,
+}) => {
+  const team_name = TEAM_DATA.name + ' admin';
+  const team_description = TEAM_DATA.description;
+  const invite_admin_user_email = ADMIN_LOGIN_DATA.email;
+  const invite_admin_user_password = ADMIN_LOGIN_DATA.password!;
+
+  await navigate_team(page, null, null);
+  await click_new_team_button(page, null, null);
+  await create_team(page, null, null, team_name, team_description);
+  await search_team(page, null, null, team_name);
+  await search_is_visible(page, null, null, team_name);
+  await search_team(page, null, null, '');
+
+  await click_team_button(page, null, null, team_name);
+
+  // extract the id from url
+  await page.waitForURL(/teams/);
+  const team_id = page.url().split('teams/')[1].split('?')[0];
+  console.log(team_id);
+
+  await invite_member(page, null, null, invite_admin_user_email!, 'admin');
+  await invitation_sent_toast_is_visible(page, null, null);
+
+  // Open a new browser context for the guest user
+  const guestContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+  const guestPage = await guestContext.newPage();
+
+  await navigate_login(guestPage, null, null);
+  await login(guestPage, null, null, invite_admin_user_email!, invite_admin_user_password!);
+
+  await click_community_link(guestPage, null, null);
+  await click_pending_request_button(guestPage, null, null);
+  await click_accept_button(guestPage, null, null);
+  await invitation_accepted_toast_is_visible(guestPage, null, null);
+
+  await navigate_team_detail_page(guestPage, null, null, team_id);
+  await is_member_visible(guestPage, null, null, invite_admin_user_email!);
+
+  await guestContext.close();
+});
+
+test('PV : TEAM DETAIL PAGE : Invite maintainer user -> Check access', async ({ page, browser }) => {
+  const team_name = TEAM_DATA.name + ' maintainer';
+  const team_description = TEAM_DATA.description;
+  const invite_maintainer_user_email = MAINTAINER_LOGIN_DATA.email;
+  const invite_maintainer_user_password = MAINTAINER_LOGIN_DATA.password!;
+
+  await navigate_team(page, null, null);
+  await click_new_team_button(page, null, null);
+  await create_team(page, null, null, team_name, team_description);
+  await search_team(page, null, null, team_name);
+  await search_is_visible(page, null, null, team_name);
+  await search_team(page, null, null, '');
+
+  await click_team_button(page, null, null, team_name);
+
+  // extract the id from url
+  await page.waitForURL(/teams/);
+  const team_id = page.url().split('teams/')[1].split('?')[0];
+  console.log(team_id);
+
+  await invite_member(page, null, null, invite_maintainer_user_email!, 'maintainer');
+  await invitation_sent_toast_is_visible(page, null, null);
+
+  // Open a new browser context for the guest user
+  const guestContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+  const guestPage = await guestContext.newPage();
+
+  await navigate_login(guestPage, null, null);
+  await login(guestPage, null, null, invite_maintainer_user_email!, invite_maintainer_user_password!);
+
+  await click_community_link(guestPage, null, null);
+  await click_pending_request_button(guestPage, null, null);
+  await click_accept_button(guestPage, null, null);
+  await invitation_accepted_toast_is_visible(guestPage, null, null);
+
+  await navigate_team_detail_page(guestPage, null, null, team_id);
+  await access_denied_toast_is_visible(guestPage, null, null);
+
+  await guestContext.close();
+});
+
+test('PV : TEAM DETAIL PAGE : Invite member user -> Check access', async ({ page, browser }) => {
+  const team_name = TEAM_DATA.name + ' member';
+  const team_description = TEAM_DATA.description;
+  const invite_member_user_email = MEMBER_LOGIN_DATA.email;
+  const invite_member_user_password = MEMBER_LOGIN_DATA.password!;
+
+  await navigate_team(page, null, null);
+  await click_new_team_button(page, null, null);
+  await create_team(page, null, null, team_name, team_description);
+  await search_team(page, null, null, team_name);
+  await search_is_visible(page, null, null, team_name);
+  await search_team(page, null, null, '');
+
+  await click_team_button(page, null, null, team_name);
+
+  // extract the id from url
+  await page.waitForURL(/teams/);
+  const team_id = page.url().split('teams/')[1].split('?')[0];
+  console.log(team_id);
+
+  await invite_member(page, null, null, invite_member_user_email!, 'member');
+  await invitation_sent_toast_is_visible(page, null, null);
+
+  // Open a new browser context for the guest user
+  const guestContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+  const guestPage = await guestContext.newPage();
+
+  await navigate_login(guestPage, null, null);
+  await login(guestPage, null, null, invite_member_user_email!, invite_member_user_password!);
+
+  await click_community_link(guestPage, null, null);
+  await click_pending_request_button(guestPage, null, null);
+  await click_accept_button(guestPage, null, null);
+  await invitation_accepted_toast_is_visible(guestPage, null, null);
+
+  await navigate_team_detail_page(guestPage, null, null, team_id);
+  await access_denied_toast_is_visible(guestPage, null, null);
+
+  await guestContext.close();
+});
+
+test('PV : TEAM DETAIL PAGE : Invite user with any role -> Cancel invite -> Cannot access', async ({ page }) => {});

@@ -9,20 +9,35 @@ export const LOGIN_DATA = {
 };
 
 export const CATEGORY_DATA = {
-  name: 'Category ' + Math.floor(Math.random() * 1000),
-  update_string: 'Updated Category ' + Math.floor(Math.random() * 1000),
+  name: 'Category ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
+  update_string: 'Updated Category ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
 };
 
 export const PROMPT_DATA = {
-  name: 'Prompt ' + Math.floor(Math.random() * 1000),
+  name: 'Prompt ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
   description: 'This is a test description',
-  update_name: 'Updated Prompt ' + Math.floor(Math.random() * 1000),
+  update_name: 'Updated Prompt ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
   update_description: 'This is an updated test description',
 };
 
 export const TEAM_DATA = {
-  name: 'Team ' + Math.floor(Math.random() * 1000),
+  name: 'Team ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
   description: 'This is a test description',
-  update_name: 'Updated Team ' + Math.floor(Math.random() * 1000),
+  update_name: 'Updated Team ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
   update_description: 'This is an updated test description',
+};
+
+export const ADMIN_LOGIN_DATA = {
+  email: process.env.ADMIN_USER_EMAIL,
+  password: process.env.ADMIN_USER_PASSWORD,
+};
+
+export const MAINTAINER_LOGIN_DATA = {
+  email: process.env.ADMIN_USER_EMAIL,
+  password: process.env.ADMIN_USER_PASSWORD,
+};
+
+export const MEMBER_LOGIN_DATA = {
+  email: process.env.ADMIN_USER_EMAIL,
+  password: process.env.ADMIN_USER_PASSWORD,
 };
