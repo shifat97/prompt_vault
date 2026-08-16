@@ -59,3 +59,5 @@ k6/command.txt
 
 CLAUDE.md
 
+# Playwright Auth state files
+playwright/.auth/

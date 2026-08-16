@@ -10,7 +10,9 @@ export const CAT_NAME_FILED = '//input[@id="name"]';
 export const SAVE_UPDATE_BUTTON = '//button[@type="submit"]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
 export const NOT_CAT_FOUND_TEXT = '//div[@style="min-width: 740px;"]//div[contains(text(), "No categories found.")]';
-export const SUCCESS_TOAST = '//p[contains(text(), "Success")]';
+export const CREATED_SUCCESS_TOAST = '//p[contains(text(), "Category created")]';
+export const DELETED_SUCCESS_TOAST = '//p[contains(text(), "Category deleted")]';
+export const UPDATED_SUCCESS_TOAST = '//p[contains(text(), "Category updated")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -52,10 +54,19 @@ export async function navigate_category(page: Page, test: any, ai: any) {
   await expect(page).toHaveURL(/categories/);
 }
 
-export async function success_toast_is_visible(page: Page, test: any, ai: any) {
-  const success_toast = page.locator(SUCCESS_TOAST);
-  await wait_for_loadState(page, test, ai, 'load', 2000);
-  await expect(success_toast).toBeVisible();
+export async function created_success_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(CREATED_SUCCESS_TOAST);
+  await expect(success_toast).toBeVisible({ timeout: 5000 });
+}
+
+export async function deleted_success_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(DELETED_SUCCESS_TOAST);
+  await expect(success_toast).toBeVisible({ timeout: 5000 });
+}
+
+export async function updated_success_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(UPDATED_SUCCESS_TOAST);
+  await expect(success_toast).toBeVisible({ timeout: 5000 });
 }
 
 export async function create_cat(page: Page, test: any, ai: any, cat_name: string) {

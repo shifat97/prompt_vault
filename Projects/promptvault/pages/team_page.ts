@@ -10,13 +10,15 @@ export const UPDATE_TEAM_MODAL_TITLE = '//h2[contains(text(), "Update Team")]';
 export const MODAL_NAME_FIELD = '//input[@id="name"]';
 export const MODAL_DESCRIPTION_FIELD = '//textarea[@id="description"]';
 export const MODAL_SAVE_BUTTON = '//button[@type="submit"]';
-export const SUCCESS_TOAST = '//p[contains(text(), "Success")]';
 export const SEARCH_TEAM = '//input[@placeholder="Search teams..."]';
 export const EDIT_TEAM_BUTTON = 'svg.lucide-pencil';
 export const DELETE_TEAM_BUTTON = 'svg.lucide-trash2';
 export const DELETE_CONFIRM_BUTTON = '//button[contains(text(), "Delete")]';
 export const DELETE_CONFIRM_TITLE = '//h2[@id="confirm-title"]';
 export const EMPTY_TEAM_STRING = `//div[contains(text(), "You don't own any teams yet.")]`;
+export const CREATED_SUCCESS_TOAST = '//p[contains(text(), "Team created")]';
+export const DELETED_SUCCESS_TOAST = '//p[contains(text(), "Team deleted")]';
+export const UPDATED_SUCCESS_TOAST = '//p[contains(text(), "Team updated")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -32,10 +34,19 @@ export async function click_new_team_button(page: Page, test: any, ai: any) {
   await btn.click();
 }
 
-export async function success_toast_is_visible(page: Page, test: any, ai: any) {
-  const success_toast = page.locator(SUCCESS_TOAST);
-  await wait_for_loadState(page, test, ai, 'load', 2000);
-  await expect(success_toast).toBeVisible();
+export async function created_success_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(CREATED_SUCCESS_TOAST);
+  await expect(success_toast).toBeVisible({ timeout: 5000 });
+}
+
+export async function deleted_success_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(DELETED_SUCCESS_TOAST);
+  await expect(success_toast).toBeVisible({ timeout: 5000 });
+}
+
+export async function updated_success_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(UPDATED_SUCCESS_TOAST);
+  await expect(success_toast).toBeVisible({ timeout: 5000 });
 }
 
 export async function empty_team_string_is_visible(page: Page, test: any, ai: any) {
@@ -62,7 +73,7 @@ export async function create_team(page: Page, test: any, ai: any, team_name: str
   await name.fill(team_name);
   await description.fill(team_description);
   await save_button.click();
-  await success_toast_is_visible(page, test, ai);
+  await created_success_toast_is_visible(page, test, ai);
 }
 
 export async function search_team(page: Page, test: any, ai: any, search_string: string) {
@@ -93,7 +104,7 @@ export async function update_prompt(page: Page, test: any, ai: any, team_name: s
   await modal_name_field.fill(team_name);
   await modal_description_field.fill(description);
   await modal_update_button.click();
-  await success_toast_is_visible(page, test, ai);
+  await updated_success_toast_is_visible(page, test, ai);
 }
 
 export async function delete_prompt(page: Page, test: any, ai: any) {
@@ -108,5 +119,5 @@ export async function delete_prompt(page: Page, test: any, ai: any) {
   await expect(delete_confirm_button).toBeVisible();
 
   await delete_confirm_button.click();
-  await success_toast_is_visible(page, test, ai);
+  await deleted_success_toast_is_visible(page, test, ai);
 }

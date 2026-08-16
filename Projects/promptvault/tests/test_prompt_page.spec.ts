@@ -20,14 +20,7 @@ import {
 import { LOGIN_DATA, CATEGORY_DATA, PROMPT_DATA } from '../../../test_data/promptvault/data';
 
 test('PV : PROMPT PAGE : CRUD operations on prompt', async ({ page }) => {
-  test.setTimeout(90000); // 90s for this test
-
-  await navigate_login(page, test, null);
-  console.log('NAVIGATING LOGIN PAGE');
-  await login(page, null, null, LOGIN_DATA.email!, LOGIN_DATA.password!);
-  console.log('LOGGED IN');
-  await expect(page).toHaveURL(/dashboard/);
-  console.log('DASHBOARD URL VERIFIED');
+  // test.setTimeout(90000); // 90s for this test
 
   // Create category
   await navigate_category(page, null, null);
