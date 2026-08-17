@@ -9,12 +9,12 @@ export const LOGIN_DATA = {
 };
 
 export const CATEGORY_DATA = {
-  name: 'Category ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
+  name: 'Category ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000) + ' data',
   update_string: 'Updated Category ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
 };
 
 export const PROMPT_DATA = {
-  name: 'Prompt ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
+  name: 'Prompt ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000) + ' data',
   description: 'This is a test description',
   update_name: 'Updated Prompt ' + Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000),
   update_description: 'This is an updated test description',

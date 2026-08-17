@@ -53,13 +53,13 @@ test('PV : TEAM PAGE : CRUD operations on team', async ({ page }) => {
   console.log('TEAM SEARCHED');
   await search_is_visible(page, test, null, team_name);
   console.log('SEARCH IS SHOWING');
-  await update_team(page, test, null, team_update_name, team_update_description);
+  await update_team(page, test, null, team_update_name, team_update_description, team_name);
   console.log('TEAM UPDATED');
   await search_team(page, test, null, team_update_name);
   console.log('TEAM SEARCHED WITH UPDATE STRING');
   await search_is_visible(page, test, null, team_update_name);
   console.log('SEARCH IS SHOWING WITH UPDATED STRING');
-  await delete_team(page, test, null);
+  await delete_team(page, test, null, team_update_name);
   console.log('TEAM DELETED');
 });
 
@@ -67,7 +67,7 @@ test('PV : TEAM PAGE : CRUD operations on team', async ({ page }) => {
   Create Team -> Go to Category Page -> Change Team -> Create Category -> Go to Prompt Page -> Change Team ->
   Create Prompt -> Verify Creation -> Search Prompt -> Update Prompt -> Delete Prompt -> Delete Category -> Delete Team -> Verify 
 */
-test('PV : CRUD operations on Team, Category and Prompt', async ({ page }) => {
+test('PV : TEAM PAGE : CRUD operations on Team, Category and Prompt', async ({ page }) => {
   const category_name = CATEGORY_DATA.name;
   const team_name = TEAM_DATA.name;
   const team_description = TEAM_DATA.description;
@@ -176,6 +176,6 @@ test('PV : CRUD operations on Team, Category and Prompt', async ({ page }) => {
   console.log('TEAM SEARCHED');
   await search_is_visible(page, test, null, team_name);
   console.log('SEARCH IS SHOWING');
-  await delete_team(page, test, null);
+  await delete_team(page, test, null, team_name);
   console.log('TEAM DELETED');
 });

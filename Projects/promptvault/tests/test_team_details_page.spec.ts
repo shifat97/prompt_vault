@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { click_new_team_button, create_team, search_team, search_is_visible, navigate_team } from '../pages/team_page';
+import {
+  click_new_team_button,
+  create_team,
+  search_team,
+  search_is_visible,
+  navigate_team,
+  delete_team,
+} from '../pages/team_page';
 import {
   navigate_team_detail_page,
   invite_member,
@@ -10,8 +17,10 @@ import {
   access_denied_toast_is_visible,
   search_member_tab,
   click_member_tab,
-  no_member_text_is_visible,
+  member_removed_toast_is_visible,
+  remove_member,
 } from '../pages/team_detail_page';
+
 import { navigate_login, login } from '../pages/login_page';
 import { click_community_link } from '../pages/sidebar';
 import {
@@ -163,5 +172,38 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
 
     await click_member_tab(page, null, null);
     await search_member_tab(page, null, null, invite_member_user_email!, true);
+  });
+
+  test('Login as admin -> Remove member -> Search maintainer -> Remove maintainer -> Search member', async ({
+    page,
+  }) => {
+    const invite_maintainer_user_email = MAINTAINER_LOGIN_DATA.email;
+    const invite_member_user_email = MEMBER_LOGIN_DATA.email;
+
+    await navigate_team(page, null, null);
+
+    await search_team(page, null, null, team_name);
+    await search_is_visible(page, null, null, team_name);
+    await search_team(page, null, null, '');
+
+    await click_team_button(page, null, null, team_name);
+
+    await click_member_tab(page, null, null);
+    await search_member_tab(page, null, null, invite_member_user_email!);
+
+    await remove_member(page, null, null, invite_member_user_email!);
+    await member_removed_toast_is_visible(page, null, null);
+    await search_member_tab(page, null, null, invite_member_user_email!, true);
+
+    await search_member_tab(page, null, null, invite_maintainer_user_email!);
+
+    await remove_member(page, null, null, invite_maintainer_user_email!);
+    await member_removed_toast_is_visible(page, null, null);
+    await search_member_tab(page, null, null, invite_maintainer_user_email!, true);
+
+    await navigate_team(page, null, null);
+    await search_team(page, null, null, team_name);
+    await search_is_visible(page, null, null, team_name);
+    await delete_team(page, null, null, team_name);
   });
 });

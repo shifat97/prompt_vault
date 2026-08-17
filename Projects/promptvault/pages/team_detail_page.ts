@@ -21,6 +21,9 @@ export const INVITATION_SENT_TOAST = '//p[contains(text(), "Invitation sent")]';
 export const INVITATION_CANCEL_TOAST = '//p[contains(text(), "Invitation cancelled")]';
 export const ACCESS_DENIED = '//h1[contains(text(), "Access Denied")]';
 export const NO_MEMBER_FOUND_TEXT = '//div[contains(text(), "No members found.")]';
+export const DELTE_TRASH_BUTTON = 'svg.lucide-trash2';
+export const REMOVE_BUTTON = '//button[contains(text(), "Remove")]';
+export const MEMBER_REMOVE_SUCCESS_TOAST = '//p[contains(text(), "Member removed")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -134,7 +137,22 @@ export async function access_denied_toast_is_visible(page: Page, test: any, ai: 
   await expect(success_toast).toBeVisible({ timeout: 5000 });
 }
 
+export async function member_removed_toast_is_visible(page: Page, test: any, ai: any) {
+  const success_toast = page.locator(MEMBER_REMOVE_SUCCESS_TOAST);
+  await expect(success_toast).toBeVisible({ timeout: 5000 });
+}
+
 export async function no_member_text_is_visible(page: Page, test: any, ai: any) {
   const no_member_text = page.locator(NO_MEMBER_FOUND_TEXT);
   await expect(no_member_text).toBeVisible();
+}
+
+export async function remove_member(page: Page, test: any, ai: any, email: string) {
+  const trash_button = page.locator(DELTE_TRASH_BUTTON);
+  const remove_button = page.locator(REMOVE_BUTTON);
+
+  await expect(trash_button).toBeVisible();
+  await trash_button.click();
+  await expect(remove_button).toBeVisible();
+  await remove_button.click();
 }
