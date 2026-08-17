@@ -33,11 +33,11 @@ export const ADMIN_LOGIN_DATA = {
 };
 
 export const MAINTAINER_LOGIN_DATA = {
-  email: process.env.ADMIN_USER_EMAIL,
-  password: process.env.ADMIN_USER_PASSWORD,
+  email: process.env.MAINTAINER_USER_EMAIL,
+  password: process.env.MAINTAINER_USER_PASSWORD,
 };
 
 export const MEMBER_LOGIN_DATA = {
-  email: process.env.ADMIN_USER_EMAIL,
-  password: process.env.ADMIN_USER_PASSWORD,
+  email: process.env.MEMBER_USER_EMAIL,
+  password: process.env.MEMBER_USER_PASSWORD,
 };
