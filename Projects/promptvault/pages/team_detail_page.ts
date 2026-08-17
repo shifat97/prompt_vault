@@ -13,12 +13,14 @@ export const MEMBER_ACCESS_BUTTON = '//button//span//span[contains(text(), "Memb
 export const SEND_INVITE_BUTTON = '//button[contains(text(), "Send Invite")]';
 export const INVITATION_TAB = '//button[contains(text(), "Invitations")]';
 export const INVITATION_TAB_SEARCH_FIELD = '//input[@placeholder="Search by email..."]';
-export const MEMBER_SEARCH_FIELD = '//input[@placeholder="Search name, email..."]';
+export const MEMBER_TAB = '//button[contains(text(), "Members")]';
+export const MEMBER_TAB_SEARCH_FIELD = '//input[@placeholder="Search name, email..."]';
 export const TRASH_BUTTON = 'svg.lucide-trash2';
 export const CANCEL_INVITATION_BUTTON = '//button[contains(text(), "Cancel Invitation")]';
 export const INVITATION_SENT_TOAST = '//p[contains(text(), "Invitation sent")]';
 export const INVITATION_CANCEL_TOAST = '//p[contains(text(), "Invitation cancelled")]';
 export const ACCESS_DENIED = '//h1[contains(text(), "Access Denied")]';
+export const NO_MEMBER_FOUND_TEXT = '//div[contains(text(), "No members found.")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -82,10 +84,36 @@ export async function cancel_invitation(page: Page, test: any, ai: any, email: s
   await cancel_invitation_button.click();
 }
 
-export async function is_member_visible(page: Page, test: any, ai: any, email: string) {
-  const member_search_field = page.locator(MEMBER_SEARCH_FIELD);
-  await expect(member_search_field).toBeVisible();
-  await member_search_field.fill(email);
+export async function click_invitation_tab(page: Page, test: any, ai: any) {
+  const invitation_tab = page.locator(INVITATION_TAB);
+  await expect(invitation_tab).toBeVisible();
+  await invitation_tab.click();
+}
+
+export async function click_member_tab(page: Page, test: any, ai: any) {
+  const member_tab = page.locator(MEMBER_TAB);
+  await expect(member_tab).toBeVisible();
+  await member_tab.click();
+}
+
+export async function search_member_tab(page: Page, test: any, ai: any, email: string, no_text: boolean = false) {
+  const member_tab_search_field = page.locator(MEMBER_TAB_SEARCH_FIELD);
+  await expect(member_tab_search_field).toBeVisible();
+  await member_tab_search_field.fill(email);
+
+  if (no_text) {
+    await no_member_text_is_visible(page, null, null);
+    return;
+  }
+
+  const member = page.locator(`//p[contains(text(), "${email}")]`);
+  await expect(member).toBeVisible();
+}
+
+export async function search_invitation_tab(page: Page, test: any, ai: any, email: string) {
+  const invitation_tab_search_field = page.locator(INVITATION_TAB_SEARCH_FIELD);
+  await expect(invitation_tab_search_field).toBeVisible();
+  await invitation_tab_search_field.fill(email);
 
   const member = page.locator(`//p[contains(text(), "${email}")]`);
   await expect(member).toBeVisible();
@@ -104,4 +132,9 @@ export async function invitation_cancel_toast_is_visible(page: Page, test: any, 
 export async function access_denied_toast_is_visible(page: Page, test: any, ai: any) {
   const success_toast = page.locator(ACCESS_DENIED);
   await expect(success_toast).toBeVisible({ timeout: 5000 });
+}
+
+export async function no_member_text_is_visible(page: Page, test: any, ai: any) {
+  const no_member_text = page.locator(NO_MEMBER_FOUND_TEXT);
+  await expect(no_member_text).toBeVisible();
 }

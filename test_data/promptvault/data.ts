@@ -41,3 +41,8 @@ export const MEMBER_LOGIN_DATA = {
   email: process.env.MEMBER_USER_EMAIL,
   password: process.env.MEMBER_USER_PASSWORD,
 };
+
+export const CANCEL_MEMBER_DATA = {
+  email: `msb.reza+${Math.floor(Math.random() * 10000) * Math.floor(Math.random() * 10000)}@asthait.com`,
+  password: 'Test1234@',
+};

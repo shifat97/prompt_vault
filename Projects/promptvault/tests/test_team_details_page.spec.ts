@@ -5,12 +5,13 @@ import {
   invite_member,
   cancel_invitation,
   click_team_button,
-  is_member_visible,
   invitation_sent_toast_is_visible,
   invitation_cancel_toast_is_visible,
   access_denied_toast_is_visible,
+  search_member_tab,
+  click_member_tab,
+  no_member_text_is_visible,
 } from '../pages/team_detail_page';
-import { click_profile, logout } from '../pages/header';
 import { navigate_login, login } from '../pages/login_page';
 import { click_community_link } from '../pages/sidebar';
 import {
@@ -23,6 +24,7 @@ import {
   MAINTAINER_LOGIN_DATA,
   MEMBER_LOGIN_DATA,
   TEAM_DATA,
+  CANCEL_MEMBER_DATA,
 } from '../../../test_data/promptvault/data';
 
 let team_name: string = '';
@@ -65,7 +67,7 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
     await invitation_accepted_toast_is_visible(guestPage, null, null);
 
     await navigate_team_detail_page(guestPage, null, null, team_id);
-    await is_member_visible(guestPage, null, null, invite_admin_user_email!);
+    await search_member_tab(guestPage, null, null, invite_admin_user_email!);
 
     await guestContext.close();
   });
@@ -141,6 +143,25 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
 
     await guestContext.close();
   });
-});
 
-test('PV : TEAM DETAIL PAGE : Invite user with any role -> Cancel invite -> Cannot access', async ({ page }) => {});
+  test('Invite user with any role -> Cancel invite -> Cannot access', async ({ page }) => {
+    const invite_member_user_email = CANCEL_MEMBER_DATA.email;
+
+    await navigate_team(page, null, null);
+
+    await search_team(page, null, null, team_name);
+    await search_is_visible(page, null, null, team_name);
+    await search_team(page, null, null, '');
+
+    await click_team_button(page, null, null, team_name);
+
+    await invite_member(page, null, null, invite_member_user_email!, 'member');
+    await invitation_sent_toast_is_visible(page, null, null);
+
+    await cancel_invitation(page, null, null, invite_member_user_email!);
+    await invitation_cancel_toast_is_visible(page, null, null);
+
+    await click_member_tab(page, null, null);
+    await search_member_tab(page, null, null, invite_member_user_email!, true);
+  });
+});
