@@ -17,6 +17,9 @@ export const DELETE_CONFIRM_BUTTON =
 export const EDIT_BUTTON = '//button[contains(text(), "Edit")]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
 export const SELECT_OPTION = '//button[@role="option"]';
+export const VIEW_ALL_VERSION_BUTTON = '//a[contains(text(), "View All →")]';
+export const RESOTRE_THIS_VERSION = '//button[@title="Restore this version"]';
+export const RESTORE_BUTTON = '//button[contains(@class, "bg-amber-500")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -99,4 +102,33 @@ export async function is_success_visible(page: Page, test: any, ai: any): Promis
   await wait_for_loadState(page, test, null, 'load', 2000);
   await expect(success_msg).toBeVisible();
   return await success_msg.isVisible();
+}
+
+export async function check_is_version_changed(page: Page, test: any, ai: any, title: string, description: string) {
+  const title_field = page.locator(`//h2[contains(text(), "${title}")]`);
+  const desc_field = page.locator(`//p[contains(text(), "${description}")]`);
+
+  await expect(title_field).toBeVisible();
+  await expect(desc_field).toBeVisible();
+
+  const current_title = await title_field.textContent();
+  const current_description = await desc_field.textContent();
+
+  expect(current_title).toBe(title);
+  expect(current_description).toBe(description);
+}
+
+export async function change_version(page: Page, test: any, ai: any) {
+  const view_all_version_btn = page.locator(VIEW_ALL_VERSION_BUTTON);
+  const restore_this_version_btn = page.locator(RESOTRE_THIS_VERSION);
+  const restore_btn = page.locator(RESTORE_BUTTON);
+
+  await expect(view_all_version_btn).toBeVisible();
+  await view_all_version_btn.click();
+  await wait_for_loadState(page, test, null, 'load', 1000);
+  await expect(restore_this_version_btn).toBeVisible();
+  await restore_this_version_btn.click();
+  await expect(restore_btn).toBeVisible();
+  await restore_btn.click();
+  await is_success_visible(page, test, null);
 }

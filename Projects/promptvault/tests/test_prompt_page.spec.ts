@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { created_success_toast_is_visible, create_cat, navigate_category } from '../pages/category_page';
+import { created_success_toast_is_visible, create_cat, delete_cat, navigate_category } from '../pages/category_page';
 import {
   navigate_prompt,
   click_view_prompt,
@@ -15,6 +15,8 @@ import {
   delete_prompt,
   fill_updated_description,
   is_success_visible,
+  change_version,
+  check_is_version_changed,
 } from '../pages/prompt_detail_page';
 import { CATEGORY_DATA, PROMPT_DATA } from '../../../test_data/promptvault/data';
 
@@ -65,6 +67,15 @@ test('PV : PROMPT PAGE : CRUD operations on prompt', async ({ page }) => {
   expect(await is_success_visible(page, null, null)).toBe(true);
   console.log('PROMPT UPDATED');
 
+  // Version controll
+  const current_page_url = page.url();
+
+  await change_version(page, null, null);
+  console.log('VERSION CHANGED');
+  await page.goto(current_page_url);
+  await check_is_version_changed(page, null, null, prompt_name, prompt_description);
+  console.log('VERSION CHANGED VERIFIED');
+
   // Delete prompt
   console.log('DELETING PROMPT');
   await delete_prompt(page, null, null, prompt_name);
@@ -77,4 +88,11 @@ test('PV : PROMPT PAGE : CRUD operations on prompt', async ({ page }) => {
   console.log('PROMPT SEARCHED');
   expect(await is_no_prompt_found_visible(page, null, null)).toBe(true);
   console.log('NO PROMPT FOUND VERIFIED');
+
+  // Delete category
+  await navigate_category(page, null, null);
+  console.log('NAVIGATING CATEGORY PAGE');
+  await delete_cat(page, null, null, category_name);
+  expect(await is_success_visible(page, null, null)).toBe(true);
+  console.log('CATEGORY DELETED');
 });
