@@ -20,8 +20,13 @@ export const SELECT_OPTION = '//button[@role="option"]';
 export const VIEW_ALL_VERSION_BUTTON = '//a[contains(text(), "View All →")]';
 export const RESOTRE_THIS_VERSION = '//button[@title="Restore this version"]';
 export const RESTORE_BUTTON = '//button[contains(@class, "bg-amber-500")]';
+export const BACK_BUTTON = '//a[@href="/prompts"][contains(text(), "Back")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
+
+export async function click_back_button(page: Page, test: any, ai: any) {
+  await page.locator(BACK_BUTTON).click();
+}
 
 export async function fill_updated_description(
   page: Page,

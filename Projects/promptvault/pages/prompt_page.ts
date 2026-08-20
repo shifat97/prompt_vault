@@ -13,6 +13,15 @@ export const SHARE_ADD_USER_BUTTON = '//button[@jf-ext-button-ct="add user"]';
 export const DELETE_SHARE_BUTTON = '//button[@title="Delete share"]';
 export const EDIT_SHARE_BUTTON = '//button[@title="Edit share"]';
 export const NO_PROMP_FOUND = '//div[contains(text(), "No prompts found.")]';
+export const SHARE_MODAL_ADD_BUTTON = '//button[contains(text(), "Add User")]';
+export const SHARE_MODAL_EMAIL_FIELD = '//input[@type="email"]';
+export const SHARE_MODAL_SEARCH_FIELD = '//input[@placeholder="Filter by name and email..."]';
+export const SHARED_WITH_ME_TAB = '//button[contains(text(), "Shared with Me")]';
+export const DELETE_SHARE = '//button[@title="Delete share"]';
+export const REVOKE_BUTTON = '//button[contains(text(), "Revoke")]';
+export const NO_SHARED_PROMPT_FOUND =
+  '//div[contains(@style, "min-width: 840px;")]//div[contains(text(), "No prompts found.")]';
+export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -78,4 +87,45 @@ export async function search_prompt(page: Page, test: any, ai: any, search_strin
   await expect(search_input).toBeVisible();
   await search_input.fill(search_string);
   await wait_for_loadState(page, test, null, 'load', 1000);
+}
+
+export async function click_share_modal_add_button(page: Page, test: any, ai: any) {
+  const add_btn = page.locator(SHARE_MODAL_ADD_BUTTON);
+  await expect(add_btn).toBeVisible();
+  await add_btn.click();
+  await wait_for_loadState(page, test, null, 'load', 2000);
+}
+
+export async function fill_share_input_field(page: Page, test: any, ai: any, email: string) {
+  const email_field = page.locator(SHARE_MODAL_EMAIL_FIELD);
+  await expect(email_field).toBeVisible();
+  await email_field.fill(email);
+}
+
+export async function click_shared_with_me_tab(page: Page, test: any, ai: any) {
+  await page.locator(SHARED_WITH_ME_TAB).click();
+}
+
+export async function share_is_visible(page: Page, test: any, ai: any, title: string) {
+  const locator = page.locator(`//p[@title="${title}"]`);
+  await expect(locator).toBeVisible();
+}
+
+export async function delete_share(page: Page, test: any, ai: any) {
+  await page.locator(DELETE_SHARE).click();
+  await page.locator(REVOKE_BUTTON).click();
+  await wait_for_loadState(page, test, ai, 'load', 2000);
+}
+
+export async function no_shared_prompt_found_is_visible(page: Page, test: any, ai: any) {
+  const no_shared_prompt_found = page.locator(NO_SHARED_PROMPT_FOUND);
+  await expect(no_shared_prompt_found).toBeVisible();
+}
+
+export async function delete_from_prompt_page(page: Page, test: any, ai: any, prompt_name: string) {
+  const locator = page.locator(`//div[@class="text-right"]//button[@aria-label="Delete ${prompt_name}"]`);
+  await expect(locator).toBeVisible();
+  await locator.click();
+  await page.locator(DELETE_BUTTON).click();
+  await wait_for_loadState(page, test, ai, 'load', 2000);
 }
