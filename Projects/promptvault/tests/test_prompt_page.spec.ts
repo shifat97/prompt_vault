@@ -17,6 +17,8 @@ import {
   delete_from_prompt_page,
   click_shared_prompt,
   edit_with_shared_user,
+  click_public_access_button,
+  click_generate_link_button,
 } from '../pages/prompt_page';
 import {
   navigate_to_prompt_page,
@@ -31,8 +33,9 @@ import {
   click_back_button,
   prompt_title_matched,
 } from '../pages/prompt_detail_page';
-import { CATEGORY_DATA, PROMPT_DATA, ADMIN_LOGIN_DATA } from '../../../test_data/promptvault/data';
+import { CATEGORY_DATA, PROMPT_DATA, ADMIN_LOGIN_DATA, MAINTAINER_LOGIN_DATA } from '../../../test_data/promptvault/data';
 import { login, navigate_login } from '../pages/login_page';
+import { fill_public_search_box, navigate_public_page, prompt_title_is_visible } from '../pages/public_page';
 
 // Create prompt -> Search prompt -> View prompt -> Update prompt -> Delete prompt
 
@@ -243,6 +246,72 @@ test('PV : PROMPT PAGE : Create prompt -> Share prompt with edit access -> Login
   await navigate_prompt(page, null, null);
   console.log('DELETING PROMPT');
   await delete_from_prompt_page(page, null, null, updated_prompt_name);
+  expect(await is_success_visible(page, null, null)).toBe(true);
+  console.log('PROMPT DELETED');
+
+  // Delete category
+  await navigate_category(page, null, null);
+  console.log('NAVIGATING CATEGORY PAGE');
+  await delete_cat(page, null, null, category_name);
+  expect(await is_success_visible(page, null, null)).toBe(true);
+  console.log('CATEGORY DELETED');
+});
+
+test('Go to prompt page -> Share prompt with public access -> Login as random user -> Check if visible in public prompt page -> Check if prompt can be accessed', async ({ page, browser }) => {
+  const category_name = CATEGORY_DATA.name;
+  const prompt_name = PROMPT_DATA.name;
+  const prompt_description = PROMPT_DATA.description;
+
+  const guest_email = MAINTAINER_LOGIN_DATA.email;
+  const guest_password = MAINTAINER_LOGIN_DATA.password;
+
+  await navigate_category(page, null, null);
+  console.log('NAVIGATING CATEGORY PAGE');
+  await create_cat(page, null, null, category_name);
+  await created_success_toast_is_visible(page, test, null);
+  console.log('CATEGORY CREATED');
+
+  await navigate_prompt(page, null, null);
+  console.log('NAVIGATING PROMPT PAGE');
+  await click_prompt_button(page, null, null);
+  console.log('CLICKED PROMPT BUTTON');
+  await create_prompt(page, null, null, prompt_name, prompt_description, category_name);
+  expect(await is_success_visible(page, null, null)).toBe(true);
+  console.log('PROMPT CREATED');
+
+  // extract the id from url
+  await page.waitForURL(/prompts/);
+  const prompt_id = page.url().split('prompts/')[1].split('?')[0];
+  console.log(prompt_id);
+
+  await click_back_button(page, null, null);
+  console.log('CLICKING BACK BUTTON');
+
+  await click_share_prompt(page, null, null, prompt_name);
+  await click_share_modal_add_button(page, null, null);
+  await click_public_access_button(page, null, null);
+  await click_generate_link_button(page, null, null);
+
+  // Open a new browser context for the guest user
+  const guestContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+  const guestPage = await guestContext.newPage();
+
+  await navigate_login(guestPage, null, null);
+  await login(guestPage, null, null, guest_email!, guest_password!);
+
+  await navigate_public_page(guestPage, null, null);
+  await fill_public_search_box(guestPage, null, null, prompt_name);
+  await prompt_title_is_visible(guestPage, null, null, prompt_name);
+  console.log('PROMPT IS VISIBLE');
+
+  await navigate_to_prompt_page(guestPage, null, null, prompt_id);
+  await prompt_title_matched(guestPage, null, null, prompt_name);
+  console.log('PROMPT IS ACCESSIBLE');
+
+  // Delete prompt
+  await navigate_prompt(page, null, null);
+  console.log('DELETING PROMPT');
+  await delete_from_prompt_page(page, null, null, prompt_name);
   expect(await is_success_visible(page, null, null)).toBe(true);
   console.log('PROMPT DELETED');
 

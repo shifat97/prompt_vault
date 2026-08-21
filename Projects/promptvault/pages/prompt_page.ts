@@ -22,6 +22,8 @@ export const REVOKE_BUTTON = '//button[contains(text(), "Revoke")]';
 export const NO_SHARED_PROMPT_FOUND = '//div[contains(@style, "min-width: 840px;")]//div[contains(text(), "No prompts found.")]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
 export const EDIT_BUTTON = '//button[contains(text(), "Edit")]';
+export const PUBLIC_ACCESS_BUTTON = '//button//div//p[contains(text(), "Public Access")]';
+export const GENERATE_LINK_BUTTON = '//button[contains(text(), "Generate Link")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -139,4 +141,12 @@ export async function delete_from_prompt_page(page: Page, test: any, ai: any, pr
   await locator.click();
   await page.locator(DELETE_BUTTON).click();
   await wait_for_loadState(page, test, ai, 'load', 2000);
+}
+
+export async function click_public_access_button(page: Page, test: any, ai: any) {
+  await page.locator(PUBLIC_ACCESS_BUTTON).click();
+}
+
+export async function click_generate_link_button(page: Page, test: any, ai: any) {
+  await page.locator(GENERATE_LINK_BUTTON).click();
 }
