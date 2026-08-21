@@ -19,9 +19,9 @@ export const SHARE_MODAL_SEARCH_FIELD = '//input[@placeholder="Filter by name an
 export const SHARED_WITH_ME_TAB = '//button[contains(text(), "Shared with Me")]';
 export const DELETE_SHARE = '//button[@title="Delete share"]';
 export const REVOKE_BUTTON = '//button[contains(text(), "Revoke")]';
-export const NO_SHARED_PROMPT_FOUND =
-  '//div[contains(@style, "min-width: 840px;")]//div[contains(text(), "No prompts found.")]';
+export const NO_SHARED_PROMPT_FOUND = '//div[contains(@style, "min-width: 840px;")]//div[contains(text(), "No prompts found.")]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
+export const EDIT_BUTTON = '//button[contains(text(), "Edit")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
@@ -53,12 +53,7 @@ export async function click_share_prompt(page: Page, test: any, ai: any, prompt_
   await wait_for_loadState(page, test, null, 'load', 1000);
 }
 
-export async function is_prompt_search_visible(
-  page: Page,
-  test: any,
-  ai: any,
-  search_string: string,
-): Promise<boolean> {
+export async function is_prompt_search_visible(page: Page, test: any, ai: any, search_string: string): Promise<boolean> {
   const search_result = page.locator(`//p[@title="${search_string}"]`);
   await expect(search_result).toBeVisible();
   return await search_result.isVisible();
@@ -96,7 +91,9 @@ export async function click_share_modal_add_button(page: Page, test: any, ai: an
   await wait_for_loadState(page, test, null, 'load', 2000);
 }
 
-export async function fill_share_input_field(page: Page, test: any, ai: any, email: string) {
+export async function fill_share_input_field(page: Page, test: any, ai: any, email: string, isEdit: boolean = false) {
+  if (isEdit) await click_edit_shared_prompt(page, test, ai, email);
+
   const email_field = page.locator(SHARE_MODAL_EMAIL_FIELD);
   await expect(email_field).toBeVisible();
   await email_field.fill(email);
@@ -109,6 +106,20 @@ export async function click_shared_with_me_tab(page: Page, test: any, ai: any) {
 export async function share_is_visible(page: Page, test: any, ai: any, title: string) {
   const locator = page.locator(`//p[@title="${title}"]`);
   await expect(locator).toBeVisible();
+}
+
+export async function click_shared_prompt(page: Page, test: any, ai: any, title: string) {
+  const locator = page.locator(`//p[@title="${title}"]`).click();
+}
+
+export async function click_edit_shared_prompt(page: Page, test: any, ai: any, title: string) {
+  await page.locator(EDIT_BUTTON).click();
+}
+
+export async function edit_with_shared_user(page: Page, test: any, ai: any) {
+  const edit_button = page.locator(EDIT_BUTTON);
+  await expect(edit_button).toBeVisible();
+  await edit_button.click();
 }
 
 export async function delete_share(page: Page, test: any, ai: any) {

@@ -5,15 +5,13 @@ import { expect, Page } from '@playwright/test';
 import { wait_for_loadState } from '../../../base_interactions/utils';
 
 export const TITLE_INPUT_FIELD = '//input[@placeholder="e.g., Creative Writing Assistant v1"]';
-export const DESCRIPTION_INPUT_FIELD =
-  '//p[@data-placeholder="Write your prompt here. Use {{variable_name}} for dynamic inputs..."]';
+export const DESCRIPTION_INPUT_FIELD = '//p[@data-placeholder="Write your prompt here. Use {{variable_name}} for dynamic inputs..."]';
 export const SELECT_CAT_DROPDOWN = '//button//span[contains(text(), "Select Category")]';
 export const CAT_DROPDOWN_SEARCH = '//input[@placeholder="Search categories..."]';
 export const SAVE_BUTTON = '//button[contains(text(), "Save Prompt")]';
 export const SUCCESS_MESSAGE = '//p[contains(text(), "Success")]';
 export const UPDATE_PROMPT_BUTTON = '//button[contains(text(), "Update Prompt")]';
-export const DELETE_CONFIRM_BUTTON =
-  '//button[contains(text(), "Cancel")]/following-sibling::button[contains(text(), "Delete")]';
+export const DELETE_CONFIRM_BUTTON = '//button[contains(text(), "Cancel")]/following-sibling::button[contains(text(), "Delete")]';
 export const EDIT_BUTTON = '//button[contains(text(), "Edit")]';
 export const DELETE_BUTTON = '//button[contains(text(), "Delete")]';
 export const SELECT_OPTION = '//button[@role="option"]';
@@ -24,30 +22,30 @@ export const BACK_BUTTON = '//a[@href="/prompts"][contains(text(), "Back")]';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 
+export async function navigate_to_prompt_page(page: Page, test: any, ai: any, prompt_id: string) {
+  await page.goto(`${process.env.BASE_URL}/prompts/${prompt_id}`);
+  await wait_for_loadState(page, test, null, 'load', 1000);
+}
+
 export async function click_back_button(page: Page, test: any, ai: any) {
   await page.locator(BACK_BUTTON).click();
 }
 
-export async function fill_updated_description(
-  page: Page,
-  test: any,
-  ai: any,
-  description: string,
-  update_description: string,
-) {
+export async function prompt_title_matched(page: Page, test: any, ai: any, title: string) {
+  const title_locator = page.locator(`//h2[contains(text(), "${title}")]`);
+  await expect(title_locator).toBeVisible();
+
+  const title_text_content = await title_locator.textContent();
+  expect(title_text_content).toEqual(title);
+}
+
+export async function fill_updated_description(page: Page, test: any, ai: any, description: string, update_description: string) {
   const desc_field = page.locator(`//p[contains(text(), "${description}")]`);
   await expect(desc_field).toBeVisible();
   await desc_field.fill(update_description);
 }
 
-export async function create_prompt(
-  page: Page,
-  test: any,
-  ai: any,
-  title: string,
-  description: string,
-  category: string,
-) {
+export async function create_prompt(page: Page, test: any, ai: any, title: string, description: string, category: string) {
   const title_field = page.locator(TITLE_INPUT_FIELD);
   const desc_field = page.locator(DESCRIPTION_INPUT_FIELD);
   const select_cat_dropdown = page.locator(SELECT_CAT_DROPDOWN);
