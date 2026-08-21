@@ -1,12 +1,5 @@
 import { test, expect } from '@playwright/test';
-import {
-  click_new_team_button,
-  create_team,
-  search_team,
-  search_is_visible,
-  navigate_team,
-  delete_team,
-} from '../pages/team_page';
+import { click_new_team_button, create_team, search_team, search_is_visible, navigate_team, delete_team } from '../pages/team_page';
 import {
   navigate_team_detail_page,
   invite_member,
@@ -23,18 +16,8 @@ import {
 
 import { navigate_login, login } from '../pages/login_page';
 import { click_community_link } from '../pages/sidebar';
-import {
-  click_pending_request_button,
-  click_accept_button,
-  invitation_accepted_toast_is_visible,
-} from '../pages/community_page';
-import {
-  ADMIN_LOGIN_DATA,
-  MAINTAINER_LOGIN_DATA,
-  MEMBER_LOGIN_DATA,
-  TEAM_DATA,
-  CANCEL_MEMBER_DATA,
-} from '../../../test_data/promptvault/data';
+import { click_pending_request_button, click_accept_button, invitation_accepted_toast_is_visible } from '../pages/community_page';
+import { ADMIN_LOGIN_DATA, MAINTAINER_LOGIN_DATA, MEMBER_LOGIN_DATA, TEAM_DATA, CANCEL_MEMBER_DATA } from '../../../test_data/promptvault/data';
 
 let team_name: string = '';
 let team_id: string = '';
@@ -174,9 +157,7 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
     await search_member_tab(page, null, null, invite_member_user_email!, true);
   });
 
-  test('Login as admin -> Remove member -> Search maintainer -> Remove maintainer -> Search member', async ({
-    page,
-  }) => {
+  test('Login as admin -> Remove member -> Search member -> Remove maintainer -> Search maintainer', async ({ page }) => {
     const invite_maintainer_user_email = MAINTAINER_LOGIN_DATA.email;
     const invite_member_user_email = MEMBER_LOGIN_DATA.email;
 
