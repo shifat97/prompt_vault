@@ -13,8 +13,8 @@ import {
 
 import { CATEGORY_DATA } from '../../../test_data/promptvault/data';
 
-// Login -> Create Category -> Search -> Update Category -> Search With Update String -> Delete Category -> Verify
-test('PV : CATEGORY PAGE : CRUD operations on category', async ({ page }) => {
+// Create Category -> Search -> Update Category -> Verify Updated Search -> Delete Category -> Verify Not Found State
+test('PV : CATEGORY PAGE : Perform full CRUD lifecycle and search verification on Category', async ({ page }) => {
   const category_name = CATEGORY_DATA.name;
   const update_category_name = CATEGORY_DATA.update_string;
 

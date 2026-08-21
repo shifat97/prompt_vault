@@ -23,7 +23,7 @@ let team_name: string = '';
 let team_id: string = '';
 
 test.describe.serial('PV : TEAM DETAIL PAGE', () => {
-  test('Create team -> Invite admin user -> Accepet invite -> Check access', async ({ page, browser }) => {
+  test('PV : TEAM DETAIL PAGE : Invite user with Admin role, accept invitation, and verify team access', async ({ page, browser }) => {
     team_name = TEAM_DATA.name + ' admin';
     const team_description = TEAM_DATA.description;
     const invite_admin_user_email = ADMIN_LOGIN_DATA.email;
@@ -64,7 +64,7 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
     await guestContext.close();
   });
 
-  test('Invite maintainer user -> Check access', async ({ page, browser }) => {
+  test('PV : TEAM DETAIL PAGE : Invite user with Maintainer role, accept invitation, and verify access restrictions', async ({ page, browser }) => {
     const invite_maintainer_user_email = MAINTAINER_LOGIN_DATA.email;
     const invite_maintainer_user_password = MAINTAINER_LOGIN_DATA.password!;
 
@@ -100,7 +100,7 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
     await guestContext.close();
   });
 
-  test('Invite member user -> Check access', async ({ page, browser }) => {
+  test('PV : TEAM DETAIL PAGE : Invite user with Member role, accept invitation, and verify access restrictions', async ({ page, browser }) => {
     const invite_member_user_email = MEMBER_LOGIN_DATA.email;
     const invite_member_user_password = MEMBER_LOGIN_DATA.password!;
 
@@ -136,7 +136,7 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
     await guestContext.close();
   });
 
-  test('Invite user with any role -> Cancel invite -> Cannot access', async ({ page }) => {
+  test('PV : TEAM DETAIL PAGE : Cancel pending user invitation and verify removal from invited members', async ({ page }) => {
     const invite_member_user_email = CANCEL_MEMBER_DATA.email;
 
     await navigate_team(page, null, null);
@@ -157,7 +157,7 @@ test.describe.serial('PV : TEAM DETAIL PAGE', () => {
     await search_member_tab(page, null, null, invite_member_user_email!, true);
   });
 
-  test('Login as admin -> Remove member -> Search member -> Remove maintainer -> Search maintainer', async ({ page }) => {
+  test('PV : TEAM DETAIL PAGE : Remove Member and Maintainer users from team and cleanup team resource', async ({ page }) => {
     const invite_maintainer_user_email = MAINTAINER_LOGIN_DATA.email;
     const invite_member_user_email = MEMBER_LOGIN_DATA.email;
 

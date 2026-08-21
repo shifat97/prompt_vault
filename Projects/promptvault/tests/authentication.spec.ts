@@ -11,8 +11,8 @@ dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 // Reset storage state to empty context so this file runs without pre-authentication
 test.use({ storageState: { cookies: [], origins: [] } });
 
-// go to sign up page -> sign up -> verify email -> check if the url is 'https://stage.promptvault.us/dashboard' verify this url.
-test('PV : SIGNUP PAGE : Sign up and verify email', async ({ page }) => {
+// Navigate to Signup -> Register User via MailTm -> Complete Email Verification -> Verify Redirection to Dashboard
+test('PV : SIGNUP PAGE : Register user, complete email verification via MailTm, and verify dashboard access', async ({ page }) => {
   await navigate_signup(page, test, null);
   console.log('NAVIGATING SIGNUP PAGE');
 

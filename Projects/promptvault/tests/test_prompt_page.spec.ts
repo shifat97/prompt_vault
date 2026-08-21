@@ -37,9 +37,9 @@ import { CATEGORY_DATA, PROMPT_DATA, ADMIN_LOGIN_DATA, MAINTAINER_LOGIN_DATA } f
 import { login, navigate_login } from '../pages/login_page';
 import { fill_public_search_box, navigate_public_page, prompt_title_is_visible } from '../pages/public_page';
 
-// Create prompt -> Search prompt -> View prompt -> Update prompt -> Delete prompt
+// Create Category & Prompt -> Search & View Prompt -> Update & Verify Version History -> Delete Prompt & Category
 
-test('PV : PROMPT PAGE : CRUD operations on prompt', async ({ page }) => {
+test('PV : PROMPT PAGE : Perform complete CRUD operations and version history verification on Prompt', async ({ page }) => {
   // test.setTimeout(90000); // 90s for this test
 
   const category_name = CATEGORY_DATA.name;
@@ -114,7 +114,7 @@ test('PV : PROMPT PAGE : CRUD operations on prompt', async ({ page }) => {
   console.log('CATEGORY DELETED');
 });
 
-test('PV : PROMPT PAGE : Create prompt -> Share prompt with view access -> Login with shared user -> Check shared with me tab', async ({ page, browser }) => {
+test('PV : PROMPT PAGE : Share prompt with View access, verify in recipient Shared With Me tab, and revoke share', async ({ page, browser }) => {
   const category_name = CATEGORY_DATA.name;
   const prompt_name = PROMPT_DATA.name;
   const prompt_description = PROMPT_DATA.description;
@@ -177,7 +177,7 @@ test('PV : PROMPT PAGE : Create prompt -> Share prompt with view access -> Login
   console.log('CATEGORY DELETED');
 });
 
-test('PV : PROMPT PAGE : Create prompt -> Share prompt with edit access -> Login with shared user -> Check shared with me tab -> Click prompt -> Edit prompt -> Check', async ({ page, browser }) => {
+test('PV : PROMPT PAGE : Share prompt with Edit access, update prompt as recipient, verify changes, and revoke share', async ({ page, browser }) => {
   const category_name = CATEGORY_DATA.name;
   const prompt_name = PROMPT_DATA.name;
   const prompt_description = PROMPT_DATA.description;
@@ -257,7 +257,7 @@ test('PV : PROMPT PAGE : Create prompt -> Share prompt with edit access -> Login
   console.log('CATEGORY DELETED');
 });
 
-test('Go to prompt page -> Share prompt with public access -> Login as random user -> Check if visible in public prompt page -> Check if prompt can be accessed', async ({ page, browser }) => {
+test('PV : PROMPT PAGE : Share prompt with Public access, verify visibility on Public page, and validate guest user access', async ({ page, browser }) => {
   const category_name = CATEGORY_DATA.name;
   const prompt_name = PROMPT_DATA.name;
   const prompt_description = PROMPT_DATA.description;

@@ -8,8 +8,8 @@ import { select_team, change_team } from '../pages/header';
 
 import { TEAM_DATA, PROMPT_DATA, CATEGORY_DATA } from '../../../test_data/promptvault/data';
 
-// Login -> Create Team -> Search -> Update Team -> Search With Update String -> Delete Team -> Verify
-test('PV : TEAM PAGE : CRUD operations on team', async ({ page }) => {
+// Create Team -> Search -> Update Team -> Search Updated String -> Delete Team
+test('PV : TEAM PAGE : Perform full CRUD lifecycle and search verification on Team', async ({ page }) => {
   const team_name = TEAM_DATA.name;
   const team_update_name = TEAM_DATA.update_name;
   const team_description = TEAM_DATA.description;
@@ -36,10 +36,10 @@ test('PV : TEAM PAGE : CRUD operations on team', async ({ page }) => {
 });
 
 /* 
-  Create Team -> Go to Category Page -> Change Team -> Create Category -> Go to Prompt Page -> Change Team ->
-  Create Prompt -> Verify Creation -> Search Prompt -> Update Prompt -> Delete Prompt -> Delete Category -> Delete Team -> Verify 
+  Create Team -> Switch Team in Category Page -> Create Category -> Switch Team in Prompt Page ->
+  Create, Update, & Delete Prompt -> Delete Category -> Delete Team
 */
-test('PV : TEAM PAGE : CRUD operations on Team, Category and Prompt', async ({ page }) => {
+test('PV : TEAM PAGE : End-to-end CRUD workflow across Team, Category, and Prompt entities', async ({ page }) => {
   const category_name = CATEGORY_DATA.name;
   const team_name = TEAM_DATA.name;
   const team_description = TEAM_DATA.description;
