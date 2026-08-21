@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { wait_for_loadState } from '../../../base_interactions/utils';
 
 export const CHANGE_TEAM_DROPDOWN = '//div[@class="relative"]//button[@aria-haspopup="listbox"]';
 export const PROFILE_BUTTON = '//div[@class="relative "]//button[@aria-haspopup="true"]';
@@ -13,6 +14,7 @@ export async function select_team(page: Page, test: any, ai: any, title: string)
 export async function change_team(page: Page, test: any, ai: any) {
   const change_team_dropdown = page.locator(CHANGE_TEAM_DROPDOWN);
   await change_team_dropdown.click();
+  await wait_for_loadState(page, test, ai, 'load', 2000);
 }
 
 export async function click_profile(page: Page, test: any, ai: any) {
