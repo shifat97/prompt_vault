@@ -107,15 +107,10 @@ test('PV : PROMPT PAGE : CRUD operations on prompt', async ({ page }) => {
   console.log('CATEGORY DELETED');
 });
 
-test('PV : PROMPT PAGE : Create prompt -> Share prompt with view access -> Login with shared user -> Check shared with me tab', async ({
-  page,
-  browser,
-}) => {
+test('PV : PROMPT PAGE : Create prompt -> Share prompt with view access -> Login with shared user -> Check shared with me tab', async ({ page, browser }) => {
   const category_name = CATEGORY_DATA.name;
   const prompt_name = PROMPT_DATA.name;
-  const prompt_update_name = PROMPT_DATA.update_name;
   const prompt_description = PROMPT_DATA.description;
-  const prompt_update_description = PROMPT_DATA.update_description;
 
   await navigate_category(page, null, null);
   console.log('NAVIGATING CATEGORY PAGE');
