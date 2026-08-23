@@ -1,8 +1,37 @@
+import { wait_for_loadState } from '../../../base_interactions/utils';
 import { test, expect } from '@playwright/test';
-import { click_new_team_button, create_team, search_team, search_is_visible, update_team, delete_team, navigate_team } from '../pages/team_page';
-import { created_success_toast_is_visible, create_cat, navigate_category, delete_cat, deleted_success_toast_is_visible } from '../pages/category_page';
-import { navigate_prompt, click_prompt_button, search_prompt, is_prompt_search_visible, click_view_prompt, is_no_prompt_found_visible } from '../pages/prompt_page';
-import { create_prompt, update_prompt, delete_prompt, fill_updated_description, click_update_button, is_success_visible } from '../pages/prompt_detail_page';
+import {
+  click_new_team_button,
+  create_team,
+  search_team,
+  search_is_visible,
+  update_team,
+  delete_team,
+  navigate_team,
+} from '../pages/team_page';
+import {
+  created_success_toast_is_visible,
+  create_cat,
+  navigate_category,
+  delete_cat,
+  deleted_success_toast_is_visible,
+} from '../pages/category_page';
+import {
+  navigate_prompt,
+  click_prompt_button,
+  search_prompt,
+  is_prompt_search_visible,
+  click_view_prompt,
+  is_no_prompt_found_visible,
+} from '../pages/prompt_page';
+import {
+  create_prompt,
+  update_prompt,
+  delete_prompt,
+  fill_updated_description,
+  click_update_button,
+  is_success_visible,
+} from '../pages/prompt_detail_page';
 
 import { select_team, change_team } from '../pages/header';
 
@@ -116,6 +145,8 @@ test('PV : TEAM PAGE : End-to-end CRUD workflow across Team, Category, and Promp
   // Verify prompt delete
   await navigate_prompt(page, null, null);
   console.log('NAVIGATING PROMPT PAGE');
+
+  await wait_for_loadState(page, null, null, 'load', 3000);
 
   await change_team(page, null, null);
   console.log('TEAM DROPDOWN CLICKED');
