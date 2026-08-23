@@ -6,6 +6,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env.pv'), override: true });
 export const LOGIN_DATA = {
   email: process.env.TEST_EMAIL,
   password: process.env.TEST_PASSWORD,
+  username: process.env.TEST_USERNAME,
 };
 
 export const CATEGORY_DATA = {
